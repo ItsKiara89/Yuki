@@ -24,9 +24,9 @@ export const botConfig = {
     activities: [
       {
         // Text users will see (example: "Playing /help | Titan Bot").
-        name: "Made with ❤️",
+        name: "Watching Yuki",
         // Activity type number (0 = Playing).
-        type: 0,
+        type: 1,
       },
     ],
   },
@@ -91,8 +91,8 @@ export const botConfig = {
   embeds: {
     colors: {
       // Main brand colors.
-      primary: "#336699",
-      secondary: "#2F3136",
+      primary: "#ff94b0",
+      secondary: "#ff48ac",
 
       // Standard status colors for success/error/warning/info messages.
       success: "#57F287",
@@ -159,11 +159,11 @@ export const botConfig = {
   economy: {
     currency: {
       // Currency display name.
-      name: "coins",
+      name: "YUKI",
       // Plural display name.
-      namePlural: "coins",
+      namePlural: "YUKIs",
       // Currency symbol shown in balances.
-      symbol: "$",
+      symbol: "Y",
     },
 
     // Starting balance for new users.
