@@ -1,48 +1,54 @@
-const {
+import {
     SlashCommandBuilder,
     PermissionFlagsBits
-} = require("discord.js");
+} from "discord.js";
 
-const fs = require("fs");
-const path = require("path");
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
 
-const file = path.join(__dirname, "../../data/ignoredUsers.json");
+import { successEmbed, errorEmbed } from "../../utils/embeds.js";
+import { InteractionHelper } from "../../utils/interactionHelper.js";
 
-module.exports = {
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const ignoredFile = path.join(__dirname, "../../data/ignoredUsers.json");
+
+export default {
     data: new SlashCommandBuilder()
         .setName("ignore")
         .setDescription("Ignore a member")
         .addUserOption(option =>
             option
-                .setName("member")
-                .setDescription("Member to ignore")
+                .setName("target")
+                .setDescription("User to ignore")
                 .setRequired(true)
         )
         .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
 
-    async execute(interaction) {
+    category: "moderation",
 
-        const member = interaction.options.getUser("member");
+    async execute(interaction) {
+        const user = interaction.options.getUser("target");
 
         let ignored = [];
 
-        if (fs.existsSync(file))
-            ignored = JSON.parse(fs.readFileSync(file));
+        if (fs.existsSync(ignoredFile))
+            ignored = JSON.parse(fs.readFileSync(ignoredFile));
 
-        if (ignored.includes(member.id)) {
-            return interaction.reply({
-                content: "That member is already ignored.",
-                ephemeral: true
+        if (ignored.includes(user.id)) {
+            return InteractionHelper.universalReply(interaction, {
+                embeds: [errorEmbed("Already ignored", `${user.tag} is already ignored.`)]
             });
         }
 
-        ignored.push(member.id);
+        ignored.push(user.id);
 
-        fs.writeFileSync(file, JSON.stringify(ignored, null, 2));
+        fs.writeFileSync(ignoredFile, JSON.stringify(ignored, null, 2));
 
-        interaction.reply({
-            content: `${member.tag} is now ignored.`,
-            ephemeral: true
+        return InteractionHelper.universalReply(interaction, {
+            embeds: [successEmbed("User Ignored", `${user.tag} will no longer be able to use the bot.`)]
         });
     }
 };
