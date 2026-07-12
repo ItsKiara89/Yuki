@@ -4,12 +4,22 @@ import config from "../config/application.js";
 import { reconcileReactionRoleMessages } from "../services/reactionRoleService.js";
 import { reconcileTicketPanels, reconcileVerificationPanels, reconcileReactionRolePanelHealth } from "../services/panelHealthService.js";
 import { reconcileLevelRoles } from "../services/levelRoleSyncService.js";
+//added by me
+const  { activitytype } = require{'discord.js'};
+//added by me
 
 export default {
   name: Events.ClientReady,
   once: true,
-
+//added
   async execute(client) {
+
+    client.user.setactivity({
+        name: 'streaming yuki',
+        type: activitytype.streaming,
+        url: 'https://www.twitch.tv/yuki'
+    });
+    //added
     try {
       client.user.setPresence(config.bot.presence);
 
