@@ -3,9 +3,7 @@ import {
     PermissionFlagsBits
 } from "discord.js";
 
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
+import { IgnoreService } from "../../services/ignoreService.js";
 
 import { successEmbed, errorEmbed } from "../../utils/embeds.js";
 import { InteractionHelper } from "../../utils/interactionHelper.js";
@@ -16,10 +14,16 @@ import {
     ErrorTypes
 } from "../../utils/errorHandler.js";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const ignoredFile = path.join(__dirname, "../../data/ignoredUsers.json");
+if (!IgnoreService.unignoreUser(user.id)) {
+    return InteractionHelper.universalReply(interaction, {
+        embeds: [
+            errorEmbed(
+                "User Not Ignored",
+                `${user.tag} is not ignored.`
+            )
+        ]
+    });
+}
 
 export default {
     data: new SlashCommandBuilder()
